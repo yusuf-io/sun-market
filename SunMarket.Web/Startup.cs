@@ -31,7 +31,6 @@ namespace SunMarket.Web
             services.AddDbContext<SunMarketDbContext>(options =>
             {
                 var connectionString = Configuration.GetConnectionString("sun.dev");
-                Console.WriteLine(connectionString);
                 options.EnableDetailedErrors();
                 options.UseNpgsql(connectionString);
             });

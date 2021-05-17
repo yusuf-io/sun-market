@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31229.75
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunMarket.Web", "SunMarket.Web\SunMarket.Web.csproj", "{26B4845A-8E17-4F89-8F3B-C94FFC1CF2B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunMarket.Web", "SunMarket.Web\SunMarket.Web.csproj", "{26B4845A-8E17-4F89-8F3B-C94FFC1CF2B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunMarket.Data", "SunMarket.Data\SunMarket.Data.csproj", "{F647FE95-6845-4CF8-897F-E8E7452DF287}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunMarket.Data", "SunMarket.Data\SunMarket.Data.csproj", "{F647FE95-6845-4CF8-897F-E8E7452DF287}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunMarket.Services", "SunMarket.Services\SunMarket.Services.csproj", "{57BB21B6-7D63-4545-AEA8-ADA75A66F14B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunMarket.Services", "SunMarket.Services\SunMarket.Services.csproj", "{57BB21B6-7D63-4545-AEA8-ADA75A66F14B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunMarket.Test", "SunMarket.Test\SunMarket.Test.csproj", "{AB07441E-7D6A-4FA1-B9AB-5E6309410D63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunMarket.Test", "SunMarket.Test\SunMarket.Test.csproj", "{AB07441E-7D6A-4FA1-B9AB-5E6309410D63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
