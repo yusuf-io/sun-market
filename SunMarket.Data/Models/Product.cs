@@ -10,7 +10,7 @@ namespace SunMarket.Data.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public bool IsTaxabel { get; set; }
+        public bool IsTaxable { get; set; }
         public bool IsArchived { get; set; }
 
     }

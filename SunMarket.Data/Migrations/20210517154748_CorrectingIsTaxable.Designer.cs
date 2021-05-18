@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SunMarket.Data;
@@ -9,9 +10,10 @@ using SunMarket.Data;
 namespace SunMarket.Data.Migrations
 {
     [DbContext(typeof(SunMarketDbContext))]
-    partial class SunMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210517154748_CorrectingIsTaxable")]
+    partial class CorrectingIsTaxable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
