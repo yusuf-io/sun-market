@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SunMarket.Data;
+using SunMarket.Services.Product;
 
 namespace SunMarket.Web
 {
@@ -34,6 +35,7 @@ namespace SunMarket.Web
                 options.EnableDetailedErrors();
                 options.UseNpgsql(connectionString);
             });
+            services.AddTransient<IProductService, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SunMarket.Data\SunMarket.Data.csproj" />
+  </ItemGroup>
+
 </Project>
