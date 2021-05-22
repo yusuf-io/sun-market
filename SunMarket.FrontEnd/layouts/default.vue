@@ -64,13 +64,23 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
+          title: 'Inventory',
           to: '/',
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
+          icon: 'mdi-account-box-multiple',
+          title: 'Customers',
+          to: '/customers',
+        },
+        {
+          icon: 'mdi-note-plus',
+          title: 'New Invoice',
+          to: '/invoice/new',
+        },
+        {
+          icon: 'mdi-file-multiple',
+          title: 'Orders',
+          to: '/orders',
         },
       ],
       miniVariant: false,
