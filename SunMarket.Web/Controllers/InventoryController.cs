@@ -14,8 +14,8 @@ namespace SunMarket.Web.Controllers
         private readonly IInventoryService _inventoryService;
         public InventoryController (ILogger<InventoryController> logger, IInventoryService inventoryService)
         {
-            logger = _logger;
-            inventoryService = _inventoryService;
+              _logger = logger;
+              _inventoryService = inventoryService;
         }
 
         [HttpGet("/api/inventory")]

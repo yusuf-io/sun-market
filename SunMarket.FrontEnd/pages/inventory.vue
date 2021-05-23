@@ -4,7 +4,11 @@
       <h1 class="mb-8">
         <v-icon color="primary" large>mdi-apps</v-icon> Inventory
       </h1>
-      <v-data-table :headers="headers" class="elevation-1">
+      <v-data-table
+        :headers="headers"
+        :items="productInventories"
+        class="elevation-1"
+      >
         <template #top>
           <v-toolbar flat>
             <v-toolbar-title>Actions</v-toolbar-title>
@@ -20,7 +24,7 @@
                   v-on="on"
                 >
                   <v-icon left> mdi-shape-plus </v-icon>
-                  Product
+                  <span class="d-none d-sm-inline">Product</span>
                 </v-btn>
               </template>
               <v-card>
@@ -62,6 +66,7 @@
                     Cancel
                   </v-btn>
                   <v-btn color="blue darken-1" text> Save </v-btn>
+                  <v-spacer class="d-sm-none"></v-spacer>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -70,7 +75,7 @@
               <template #activator="{ on, attrs }">
                 <v-btn color="primary" dark v-bind="attrs" v-on="on">
                   <v-icon left> mdi-table-column-plus-after </v-icon>
-                  Shipment
+                  <span class="d-none d-sm-inline">Shipment</span>
                 </v-btn>
               </template>
               <v-card>
@@ -106,23 +111,44 @@
                     Cancel
                   </v-btn>
                   <v-btn color="blue darken-1" text> Save </v-btn>
+                  <v-spacer class="d-sm-none"></v-spacer>
                 </v-card-actions>
               </v-card>
             </v-dialog>
+
             <v-dialog v-model="dialogDelete" max-width="500px">
               <v-card>
-                <v-card-title class="headline"
-                  >Are you sure you want to delete this item?</v-card-title
+                <v-card-title class="headline primary white--text"
+                  >Delete Product</v-card-title
                 >
+                <v-card-text class="text-center">
+                  <v-icon class="my-8" color="error" x-large>
+                    mdi-alert-circle-outline
+                  </v-icon>
+                  <h2>Are you sure?</h2>
+                </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text>Cancel</v-btn>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="dialogDelete = false"
+                    >Cancel</v-btn
+                  >
                   <v-btn color="blue darken-1" text>OK</v-btn>
-                  <v-spacer></v-spacer>
+                  <v-spacer class="d-sm-none"></v-spacer>
                 </v-card-actions>
               </v-card>
             </v-dialog>
           </v-toolbar>
+        </template>
+        <template #[`item.product.isArchived`]>
+          <v-icon color="error" @click="dialogDelete = true">
+            mdi-trash-can-outline
+          </v-icon>
+        </template>
+        <template #[`item.product.isTaxable`]="{ item }">
+          {{ mapIsTaxable(item) }}
         </template>
       </v-data-table>
     </v-col>
@@ -131,16 +157,28 @@
 
 <script>
 export default {
+  asyncData({ $axios }) {
+    return $axios
+      .get(`${process.env.VUE_APP_API_URL}/inventory`)
+      .then((response) => {
+        return { productInventories: response.data }
+      })
+  },
+
   data() {
     return {
       dialogProduct: false,
       dialogShipment: false,
       dialogDelete: false,
       headers: [
-        { text: 'Name', sortable: false },
-        { text: 'Quantity On-hand', sortable: false },
-        { text: 'Taxable', sortable: false },
-        { text: 'Delete', sortable: false },
+        { text: 'Name', sortable: false, value: 'product.name' },
+        { text: 'Quantity On-hand', sortable: false, value: 'quantityOnHund' },
+        {
+          text: 'Taxable',
+          sortable: false,
+          value: 'product.isTaxable',
+        },
+        { text: 'Delete', sortable: false, value: 'product.isArchived' },
       ],
       rules: {
         name: [(val) => (val || '').length > 0 || 'This field is required'],
@@ -151,6 +189,11 @@ export default {
       },
       products: ['Foo', 'Bar', 'Fizz', 'Buzz'],
     }
+  },
+  methods: {
+    mapIsTaxable(isTaxable) {
+      return isTaxable ? 'Yes' : 'No '
+    },
   },
 }
 </script>
