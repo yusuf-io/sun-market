@@ -65,7 +65,7 @@ export default {
         {
           icon: 'mdi-apps',
           title: 'Inventory',
-          to: '/',
+          to: '/inventory',
         },
         {
           icon: 'mdi-account-box-multiple',
