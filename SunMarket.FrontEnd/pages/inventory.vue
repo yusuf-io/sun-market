@@ -33,10 +33,14 @@
                 </v-card-title>
 
                 <v-card-text>
-                  <v-form>
-                    <v-checkbox label="Is the product taxable?"></v-checkbox>
+                  <v-form ref="form-product">
+                    <v-checkbox
+                      v-model="product.isTaxable"
+                      label="Is the product taxable?"
+                    ></v-checkbox>
 
                     <v-text-field
+                      v-model="product.name"
                       label="Name"
                       outlined
                       required
@@ -44,9 +48,14 @@
                     >
                     </v-text-field>
 
-                    <v-textarea label="Description" outlined></v-textarea>
+                    <v-textarea
+                      v-model="product.description"
+                      label="Description"
+                      outlined
+                    ></v-textarea>
 
                     <v-text-field
+                      v-model="product.price"
                       label="Price"
                       outlined
                       required
@@ -65,7 +74,13 @@
                   >
                     Cancel
                   </v-btn>
-                  <v-btn color="blue darken-1" text> Save </v-btn>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="saveNewProduct(product)"
+                  >
+                    Save
+                  </v-btn>
                   <v-spacer class="d-sm-none"></v-spacer>
                 </v-card-actions>
               </v-card>
@@ -208,6 +223,7 @@ export default {
         product: [(val) => !!val || 'Product is required'],
       },
       shipment: {},
+      product: {},
       productInventories: [],
       increasedQuantiy: 24,
     }
@@ -242,6 +258,19 @@ export default {
       )
       this.$refs['form-shipment'].reset()
       this.dialogShipment = false
+      this.fetchProductInventories()
+      return result.data
+    },
+
+    async saveNewProduct(product) {
+      if (!this.$refs['form-product'].validate()) return
+
+      const result = await this.$axios.post(
+        `${process.env.VUE_APP_API_URL}/products`,
+        product
+      )
+      this.$refs['form-product'].reset()
+      this.dialogProduct = false
       this.fetchProductInventories()
       return result.data
     },

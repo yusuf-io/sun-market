@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SunMarket.Services.Product;
 using SunMarket.Web.Serialization;
+using SunMarket.Web.ViewModels;
 using System.Linq;
 
 namespace SunMarket.Web.Controllers
@@ -25,6 +26,17 @@ namespace SunMarket.Web.Controllers
             return Ok(productViewModels);
         }  
         
+        [HttpPost("/api/products")]
+        public ActionResult AddProduct([FromBody] ProductModel product)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            _logger.LogInformation("Adding new product");
+            var productDataModel = ProductMapper.SerializeProduct(product);
+            var result = _productService.CreateProduct(productDataModel);
+            return Ok(result);
+        }
+
         [HttpPatch("/api/products/{id}")]
         public ActionResult ArchiveProduct(int id)
         {

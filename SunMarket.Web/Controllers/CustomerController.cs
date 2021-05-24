@@ -40,6 +40,8 @@ namespace SunMarket.Web.Controllers
         [HttpPost("/api/customer")]
         public ActionResult CreateCustomer([FromBody] CustomerModel customerModel)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             _logger.LogInformation("Creating new customer");
             customerModel.CreateOn = DateTime.UtcNow;
             customerModel.UpdateOn = DateTime.UtcNow;
