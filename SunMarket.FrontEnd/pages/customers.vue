@@ -135,7 +135,7 @@
         </template>
 
         <template #[`item.delete`]="{ item }">
-          <v-icon color="error" @click="dialogDelete = true">
+          <v-icon color="error" @click="openDeleteDialog(item.id)">
             mdi-trash-can-outline
           </v-icon>
           <v-dialog v-model="dialogDelete" max-width="350px">
@@ -153,11 +153,8 @@
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialogDelete = false"
                   >Cancel</v-btn
-                >id::{{ item.id }}
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="deleteCustomer(item.id)"
+                >
+                <v-btn color="blue darken-1" text @click="deleteCustomer()"
                   >OK</v-btn
                 >
                 <v-spacer class="d-sm-none"></v-spacer>
@@ -218,6 +215,7 @@ export default {
       },
       customer: { primaryAddress: {} },
       customers: [],
+      customerId: null,
     }
   },
 
@@ -226,6 +224,11 @@ export default {
   },
 
   methods: {
+    openDeleteDialog(id) {
+      this.customerId = id
+      this.dialogDelete = true
+    },
+
     async fetchCustomers() {
       const result = await this.$axios.get(
         `${process.env.VUE_APP_API_URL}/customers`
@@ -246,9 +249,9 @@ export default {
       return result.data
     },
 
-    async deleteCustomer(id) {
+    async deleteCustomer() {
       const result = await this.$axios.delete(
-        `${process.env.VUE_APP_API_URL}/customers/${id}`
+        `${process.env.VUE_APP_API_URL}/customers/${this.customerId}`
       )
       this.dialogDelete = false
       this.fetchCustomers()

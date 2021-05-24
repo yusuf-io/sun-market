@@ -157,7 +157,7 @@
           </span>
         </template>
         <template #[`item.product.isArchived`]="{ item }">
-          <v-icon color="error" @click="dialogDelete = true">
+          <v-icon color="error" @click="openDeleteDialog(item.product.id)">
             mdi-trash-can-outline
           </v-icon>
           <v-dialog v-model="dialogDelete" max-width="350px">
@@ -176,10 +176,7 @@
                 <v-btn color="blue darken-1" text @click="dialogDelete = false"
                   >Cancel</v-btn
                 >
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="archiveProduct(item.product.id)"
+                <v-btn color="blue darken-1" text @click="archiveProduct()"
                   >OK</v-btn
                 >
                 <v-spacer class="d-sm-none"></v-spacer>
@@ -226,6 +223,7 @@ export default {
       product: {},
       productInventories: [],
       increasedQuantiy: 24,
+      toArchiveProduct: null,
     }
   },
 
@@ -236,6 +234,11 @@ export default {
   methods: {
     mapIsTaxable(isTaxable) {
       return isTaxable ? 'Yes' : 'No '
+    },
+
+    openDeleteDialog(id) {
+      this.toArchiveProduct = id
+      this.dialogDelete = true
     },
 
     async fetchProductInventories() {
@@ -272,9 +275,9 @@ export default {
       return result.data
     },
 
-    async archiveProduct(id) {
+    async archiveProduct() {
       const result = await this.$axios.patch(
-        `${process.env.VUE_APP_API_URL}/products/${id}`
+        `${process.env.VUE_APP_API_URL}/products/${this.toArchiveProduct}`
       )
       this.dialogDelete = false
       this.fetchProductInventories()
