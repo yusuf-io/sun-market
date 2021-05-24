@@ -71,7 +71,7 @@ namespace SunMarket.Services.Inventory
                     .Include(productInventory=>productInventory.Product)
                     .First(productInventory=>productInventory.Product.Id==id);
 
-                inventory.QuantityOnHund += adjustment;
+                inventory.QuantityOnHand += adjustment;
 
                 try
                 {
@@ -117,7 +117,7 @@ namespace SunMarket.Services.Inventory
             var snapshot = new ProductInventorySnapshot
             {
                 SnapshotTime = DateTime.UtcNow,
-                QuantiyOnHand = inventory.QuantityOnHund,
+                QuantiyOnHand = inventory.QuantityOnHand,
                 Product = inventory.Product
             };
 

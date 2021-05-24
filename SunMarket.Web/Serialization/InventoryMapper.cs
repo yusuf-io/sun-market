@@ -17,7 +17,7 @@ namespace SunMarket.Web.Serialization
                 Id = inventory.Id,
                 CreateOn = inventory.CreateOn,
                 UpdateOn = inventory.UpdateOn,
-                QuantityOnHund = inventory.QuantityOnHund,
+                QuantityOnHand = inventory.QuantityOnHand,
                 IdealQuantity = inventory.IdealQuantity,
                 Product = ProductMapper.SerializeProductModel(inventory.Product)
             };
@@ -35,7 +35,7 @@ namespace SunMarket.Web.Serialization
                 Id = inventory.Id,
                 CreateOn = inventory.CreateOn,
                 UpdateOn = inventory.UpdateOn,
-                QuantityOnHund = inventory.QuantityOnHund,
+                QuantityOnHand = inventory.QuantityOnHand,
                 IdealQuantity = inventory.IdealQuantity,
                 Product = ProductMapper.SerializeProduct(inventory.Product)
             };

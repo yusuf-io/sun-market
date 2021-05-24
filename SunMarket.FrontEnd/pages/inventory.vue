@@ -84,14 +84,19 @@
                 </v-card-title>
 
                 <v-card-text>
-                  <v-form class="mt-6">
+                  <v-form ref="form-shipment" class="mt-6">
                     <v-select
-                      :items="products"
+                      v-model="shipment.productId"
+                      :items="productInventories"
+                      item-value="product.id"
+                      item-text="product.name"
                       label="Product"
                       outlined
+                      required
+                      :rules="rules.product"
                     ></v-select>
-
                     <v-text-field
+                      v-model="shipment.adjustment"
                       label="Quantity"
                       outlined
                       required
@@ -110,42 +115,62 @@
                   >
                     Cancel
                   </v-btn>
-                  <v-btn color="blue darken-1" text> Save </v-btn>
-                  <v-spacer class="d-sm-none"></v-spacer>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-
-            <v-dialog v-model="dialogDelete" max-width="500px">
-              <v-card>
-                <v-card-title class="headline primary white--text"
-                  >Delete Product</v-card-title
-                >
-                <v-card-text class="text-center">
-                  <v-icon class="my-8" color="error" x-large>
-                    mdi-alert-circle-outline
-                  </v-icon>
-                  <h2>Are you sure?</h2>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
                   <v-btn
                     color="blue darken-1"
                     text
-                    @click="dialogDelete = false"
-                    >Cancel</v-btn
+                    @click="saveNewShipment(shipment)"
                   >
-                  <v-btn color="blue darken-1" text>OK</v-btn>
+                    Save
+                  </v-btn>
                   <v-spacer class="d-sm-none"></v-spacer>
                 </v-card-actions>
               </v-card>
             </v-dialog>
           </v-toolbar>
         </template>
-        <template #[`item.product.isArchived`]>
+        <template #[`item.quantityOnHand`]="{ item }">
+          <span
+            :class="`${
+              item.quantityOnHand < item.idealQuantity
+                ? 'error--text'
+                : item.quantityOnHand > increasedQuantiy
+                ? 'warning--text'
+                : ''
+            }`"
+          >
+            {{ item.quantityOnHand }}
+          </span>
+        </template>
+        <template #[`item.product.isArchived`]="{ item }">
           <v-icon color="error" @click="dialogDelete = true">
             mdi-trash-can-outline
           </v-icon>
+          <v-dialog v-model="dialogDelete" max-width="350px">
+            <v-card>
+              <v-card-title class="headline primary white--text"
+                >Delete Product</v-card-title
+              >
+              <v-card-text class="text-center">
+                <v-icon class="my-8" color="error" x-large>
+                  mdi-alert-circle-outline
+                </v-icon>
+                <h2>Are you sure?</h2>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="dialogDelete = false"
+                  >Cancel</v-btn
+                >
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="archiveProduct(item.product.id)"
+                  >OK</v-btn
+                >
+                <v-spacer class="d-sm-none"></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </template>
         <template #[`item.product.isTaxable`]="{ item }">
           {{ mapIsTaxable(item) }}
@@ -157,14 +182,6 @@
 
 <script>
 export default {
-  asyncData({ $axios }) {
-    return $axios
-      .get(`${process.env.VUE_APP_API_URL}/inventory`)
-      .then((response) => {
-        return { productInventories: response.data }
-      })
-  },
-
   data() {
     return {
       dialogProduct: false,
@@ -172,7 +189,7 @@ export default {
       dialogDelete: false,
       headers: [
         { text: 'Name', sortable: false, value: 'product.name' },
-        { text: 'Quantity On-hand', sortable: false, value: 'quantityOnHund' },
+        { text: 'Quantity On-hand', sortable: false, value: 'quantityOnHand' },
         {
           text: 'Taxable',
           sortable: false,
@@ -184,15 +201,58 @@ export default {
         name: [(val) => (val || '').length > 0 || 'This field is required'],
         price: [(val) => !isNaN(val) || 'The entered value should be number'],
         quantity: [
-          (val) => !isNaN(val) || 'The entered value should be number',
+          (val) =>
+            (!isNaN(val) && val > 0) ||
+            'The entered value should be number and greater than 0',
         ],
+        product: [(val) => !!val || 'Product is required'],
       },
-      products: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+      shipment: {},
+      productInventories: [],
+      increasedQuantiy: 24,
     }
   },
+
+  mounted() {
+    this.fetchProductInventories()
+  },
+
   methods: {
     mapIsTaxable(isTaxable) {
       return isTaxable ? 'Yes' : 'No '
+    },
+    getQauntityOnHandClass(current, target) {
+      return 'error--text'
+    },
+
+    async fetchProductInventories() {
+      const result = await this.$axios.get(
+        `${process.env.VUE_APP_API_URL}/inventory`
+      )
+      this.dialogShipment = false
+      this.productInventories = result.data
+    },
+
+    async saveNewShipment(shipment) {
+      if (!this.$refs['form-shipment'].validate()) return
+
+      const result = await this.$axios.patch(
+        `${process.env.VUE_APP_API_URL}/inventory`,
+        shipment
+      )
+      this.$refs['form-shipment'].reset()
+      this.dialogShipment = false
+      this.fetchProductInventories()
+      return result.data
+    },
+
+    async archiveProduct(id) {
+      const result = await this.$axios.patch(
+        `${process.env.VUE_APP_API_URL}/products/${id}`
+      )
+      this.dialogDelete = false
+      this.fetchProductInventories()
+      return result.data
     },
   },
 }

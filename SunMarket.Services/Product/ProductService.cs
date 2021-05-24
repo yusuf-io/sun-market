@@ -62,7 +62,7 @@ namespace SunMarket.Services.Product
                 var newInventory = new ProductInventory
                 {
                     Product = product,
-                    QuantityOnHund = 0,
+                    QuantityOnHand = 0,
                     IdealQuantity = 10
                 };
                 _db.ProductInventories.Add(newInventory);

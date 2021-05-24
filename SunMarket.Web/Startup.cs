@@ -16,6 +16,7 @@ using SunMarket.Services.Product;
 using SunMarket.Services.Customer;
 using SunMarket.Services.Inventory;
 using SunMarket.Services.Order;
+using Newtonsoft.Json.Serialization;
 
 namespace SunMarket.Web
 {
@@ -31,7 +32,14 @@ namespace SunMarket.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
+            });
+
             services.AddDbContext<SunMarketDbContext>(options =>
             {
                 var connectionString = Configuration.GetConnectionString("sun.dev");
