@@ -40,7 +40,7 @@ namespace SunMarket.Web.Controllers
         [HttpPatch("/api/products/{id}")]
         public ActionResult ArchiveProduct(int id)
         {
-            _logger.LogInformation("Arching a product");
+            _logger.LogInformation("Archiving a product");
             var archiveResult = _productService.ArchiveProduct(id);
             return Ok(archiveResult);
         }

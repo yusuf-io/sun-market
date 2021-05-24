@@ -237,9 +237,6 @@ export default {
     mapIsTaxable(isTaxable) {
       return isTaxable ? 'Yes' : 'No '
     },
-    getQauntityOnHandClass(current, target) {
-      return 'error--text'
-    },
 
     async fetchProductInventories() {
       const result = await this.$axios.get(
