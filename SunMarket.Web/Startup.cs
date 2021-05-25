@@ -38,6 +38,8 @@ namespace SunMarket.Web
                 {
                     NamingStrategy = new CamelCaseNamingStrategy()
                 };
+
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
 
             services.AddDbContext<SunMarketDbContext>(options =>
