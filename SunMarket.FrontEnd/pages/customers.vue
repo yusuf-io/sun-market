@@ -166,20 +166,15 @@
           {{ item.firstName + ' ' + item.lastName }}
         </template>
         <template #[`item.address`]="{ item }">
-          {{
-            item.primaryAddress.addressLine1
-              ? item.primaryAddress.addressLine1
-              : '' + ' ' + item.primaryAddress.addressLine2
-              ? item.primaryAddress.addressLine2
-              : ''
-          }}
+          {{ item.primaryAddress.addressLine1 || '' }}
+          {{ item.primaryAddress.addressLine2 || '' }}
         </template>
         <template #[`item.createOn`]="{ item }">
           <div>
-            {{ $moment(item).format('MMMM Do YYYY') }}
+            {{ $moment(item.createOn).format('MMMM Do YYYY') }}
           </div>
           <div class="grey--text">
-            {{ $moment(item).fromNow() }}
+            {{ $moment.utc(item.createOn).fromNow() }}
           </div>
         </template>
       </v-data-table>
