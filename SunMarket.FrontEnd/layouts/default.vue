@@ -75,7 +75,7 @@ export default {
         {
           icon: 'mdi-note-plus',
           title: 'New Invoice',
-          to: '/invoice/new',
+          to: '/create-invoice',
         },
         {
           icon: 'mdi-file-multiple',
