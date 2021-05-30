@@ -72,7 +72,7 @@ namespace SunMarket.Services.Order
         /// <returns></returns>
         List<SalesOrder> IOrderService.GetAllOrders()
         {
-            return _db.SalesOrders
+            return _db.SalesOrders.OrderByDescending(order => order.CreateOn)
                 .Include(order => order.Customer)
                     .ThenInclude(customer => customer.PrimaryAddress)
                 .Include(order => order.SalesOrderItems)
@@ -85,11 +85,11 @@ namespace SunMarket.Services.Order
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        ServiceResponse<bool> IOrderService.MarkFulfilled(int id)
+        ServiceResponse<bool> IOrderService.MarkFulfilled(int id, bool isFulfilled)
         {
             var order = _db.SalesOrders.Find(id);
             order.UpdateOn = DateTime.UtcNow;
-            order.IsPaid = true;
+            order.IsPaid = isFulfilled;
 
             try
             {

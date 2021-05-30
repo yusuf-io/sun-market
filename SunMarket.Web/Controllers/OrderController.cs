@@ -45,11 +45,11 @@ namespace SunMarket.Web.Controllers
             return Ok(orderModels);
         }
         
-        [HttpPatch("/api/order/complete/{id}")]
-        public ActionResult MarkOrderComplete(int id)
+        [HttpPatch("/api/order/complete/{id}/{isFulfilled}")]
+        public ActionResult MarkOrderComplete(int id,  bool isFulfilled)
         {
             _logger.LogInformation($"Marking order {id} complete");
-            _orderService.MarkFulfilled(id);
+            _orderService.MarkFulfilled(id, isFulfilled);
             return Ok();
         }
     }
