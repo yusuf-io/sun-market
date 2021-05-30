@@ -266,6 +266,9 @@ export default {
           (val) =>
             (!isNaN(val) && val !== '' && val > 0) ||
             'The entered value should be number and greater than 0',
+          (val) =>
+            val <= this.selectedOrderItem?.quantityOnHand ||
+            `The quantity excesses ${this.selectedOrderItem?.product?.name} inventory. Please enter quantity less than ${this.selectedOrderItem?.quantityOnHand}`,
         ],
       },
     }
@@ -281,6 +284,11 @@ export default {
       return this.invoice.salesOrderItems.reduce(
         (a, b) => a + b.product.price * b.quantity,
         0
+      )
+    },
+    selectedOrderItem() {
+      return this.productInventories.find(
+        (inventory) => inventory.product.id === this.salesOrderItem?.product?.id
       )
     },
   },
