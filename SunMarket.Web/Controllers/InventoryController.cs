@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SunMarket.Services.Inventory;
 using SunMarket.Web.Serialization;
 using SunMarket.Web.ViewModels;
+using System;
 using System.Linq;
 
 namespace SunMarket.Web.Controllers
@@ -37,6 +38,45 @@ namespace SunMarket.Web.Controllers
             _logger.LogInformation($"Updating inventory for {shipment.ProductId} - Adjustment: {shipment.Adjustment}");
             var inventory = _inventoryService.UpdateUnitsAvailable(shipment.ProductId, shipment.Adjustment);
             return Ok(inventory);
+        }
+
+        [HttpGet("/api/inventory/snapshot")]
+        public ActionResult GetSnapshotHistory()
+        {
+
+            _logger.LogInformation("Getting snapshot history");
+            try
+            {
+                var snapshotHistory = _inventoryService.GetSnapshotHistory();
+
+                // Get distinct points in a time a snapshot was collected
+                var timelineMarker = snapshotHistory.Select(t => t.SnapshotTime).Distinct().ToList();
+
+                // Get quantities grouped by id 
+                var snapshots = snapshotHistory
+                                .GroupBy(hist => hist.Product, hist => hist.QuantiyOnHand,
+                                (key, group) => new ProductInventorySnapshotModel
+                                {
+                                    ProductId = key.Id,
+                                    QuantityOnHand = group.ToList()
+                                })
+                                .OrderBy(hist => hist.ProductId)
+                                .ToList();
+
+                var viewModal = new SnapshotResponse
+                {
+                    Timeline = timelineMarker,
+                    ProductInventorySnapshots = snapshots
+                };
+                return Ok(viewModal);
+            }
+
+            catch(Exception e)
+            {
+                _logger.LogError("Error getting snapshot history");
+                _logger.LogError(e.StackTrace);
+                return BadRequest("Error retrieving history");
+            }
         }
     }
 }

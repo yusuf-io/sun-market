@@ -69,7 +69,7 @@ namespace SunMarket.Services.Inventory
             {
                 var inventory = _db.ProductInventories
                     .Include(productInventory=>productInventory.Product)
-                    .First(productInventory=>productInventory.Product.Id==id);
+                    .First(productInventory=>productInventory.Id==id);
 
                 inventory.QuantityOnHand += adjustment;
 

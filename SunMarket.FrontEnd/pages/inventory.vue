@@ -4,6 +4,9 @@
       <h1 class="mb-8">
         <v-icon color="primary" large>mdi-apps</v-icon> Inventory
       </h1>
+
+      <inventoty-chart :snapshot-timeline="snapshotTimeline" />
+
       <v-data-table
         :headers="headers"
         :items="productInventories"
@@ -193,7 +196,18 @@
 </template>
 
 <script>
+import inventoryService from '../services/inventory-service'
+import InventotyChart from '~/components/charts/InventotyChart.vue'
+
 export default {
+  components: {
+    InventotyChart,
+  },
+  async asyncData() {
+    const snapshotTimeline = await inventoryService.getSnapshotHistory()
+    return { snapshotTimeline }
+  },
+
   data() {
     return {
       dialogProduct: false,
@@ -259,6 +273,7 @@ export default {
       this.$refs['form-shipment'].reset()
       this.dialogShipment = false
       this.fetchProductInventories()
+      this.$nuxt.refresh()
       return result.data
     },
 
