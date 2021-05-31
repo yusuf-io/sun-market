@@ -132,6 +132,16 @@
               </v-card>
             </v-dialog>
           </v-toolbar>
+
+          <v-alert
+            v-if="error"
+            border="top"
+            color="red lighten-2"
+            dark
+            dismissible
+          >
+            {{ error }}
+          </v-alert>
         </template>
 
         <template #[`item.delete`]="{ item }">
@@ -219,6 +229,7 @@ export default {
       },
       customer: { primaryAddress: {} },
       customerId: null,
+      error: null,
     }
   },
 
@@ -237,9 +248,14 @@ export default {
       this.$nuxt.refresh()
     },
     async deleteCustomer() {
-      await customerService.deleteCustomer(this.customerId)
+      this.error = null
+      const response = await customerService.deleteCustomer(this.customerId)
+
       this.dialogDelete = false
-      this.$nuxt.refresh()
+      if (response.isSuccess === true) {
+        this.$nuxt.refresh()
+      } else
+        this.error = `Error deleting customer ${this.customerId}. She/He has orders`
     },
   },
 }
