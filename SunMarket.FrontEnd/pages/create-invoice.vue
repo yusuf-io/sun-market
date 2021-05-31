@@ -6,7 +6,11 @@
         Create Invoice
       </h1>
 
-      <v-stepper v-model="stepper.current">
+      <v-alert v-if="error" border="top" color="red lighten-2" dark>
+        {{ error }}
+      </v-alert>
+
+      <v-stepper v-else v-model="stepper.current">
         <v-stepper-header>
           <template v-for="(step, index) in stepper.steps">
             <v-stepper-step
@@ -49,12 +53,14 @@
 
             <!-- Step Content #2 -->
             <template
-              v-if="step.key == 'products' && productInventories.length > 0"
+              v-if="
+                step.key == 'products' && availableProductInventories.length > 0
+              "
             >
               <v-form ref="form-invoice-product">
                 <v-select
                   v-model="salesOrderItem.product"
-                  :items="productInventories"
+                  :items="availableProductInventories"
                   item-value="product"
                   item-text="product.name"
                   label="Product Name"
@@ -290,6 +296,18 @@ export default {
       return this.productInventories.find(
         (inventory) => inventory.product.id === this.salesOrderItem?.product?.id
       )
+    },
+    availableProductInventories() {
+      return this.productInventories.filter(
+        (inventory) => inventory.quantityOnHand > 0
+      )
+    },
+    error() {
+      if (!this.customers.length > 0)
+        return 'No cutomers to create orders for them'
+      else if (!this.availableProductInventories.length > 0)
+        return 'No product inventories available'
+      return false
     },
   },
 
