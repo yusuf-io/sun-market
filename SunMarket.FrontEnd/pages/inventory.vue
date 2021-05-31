@@ -4,13 +4,20 @@
       <h1 class="mb-8">
         <v-icon color="primary" large>mdi-apps</v-icon> Inventory
       </h1>
-
-      <inventoty-chart :snapshot-timeline="snapshotTimeline" />
+      <v-card class="mb-6">
+        <v-toolbar flat>
+          <v-toolbar-title>Inventory History (Last 24 hours)</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+        <inventoty-chart :snapshot-timeline="snapshotTimeline" />
+      </v-card>
 
       <v-data-table
         :headers="headers"
         :items="productInventories"
         class="elevation-1"
+        disable-sort
       >
         <template #top>
           <v-toolbar flat>
@@ -216,14 +223,14 @@ export default {
       dialogShipment: false,
       dialogDelete: false,
       headers: [
-        { text: 'Name', sortable: false, value: 'product.name' },
-        { text: 'Quantity On-hand', sortable: false, value: 'quantityOnHand' },
+        { text: 'ID', value: 'product.id' },
+        { text: 'Name', value: 'product.name' },
+        { text: 'Quantity On-hand', value: 'quantityOnHand' },
         {
           text: 'Taxable',
-          sortable: false,
           value: 'product.isTaxable',
         },
-        { text: 'Delete', sortable: false, value: 'product.isArchived' },
+        { text: 'Delete', value: 'product.isArchived' },
       ],
       rules: {
         name: [(val) => (val || '').length > 0 || 'This field is required'],

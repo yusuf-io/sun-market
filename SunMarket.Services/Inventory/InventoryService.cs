@@ -75,7 +75,7 @@ namespace SunMarket.Services.Inventory
 
                 try
                 {
-                    CreateSnapshot(inventory);
+                    CreateSnapshot();
                 }
 
                 catch(Exception e)
@@ -112,16 +112,20 @@ namespace SunMarket.Services.Inventory
         /// Creates a snapshot record using the provided ProductInventory instance
         /// </summary>
         /// <param name="inventory"></param>
-          private void CreateSnapshot(ProductInventory inventory)
+          private void CreateSnapshot()
         {
-            var snapshot = new ProductInventorySnapshot
-            {
-                SnapshotTime = DateTime.UtcNow,
-                QuantiyOnHand = inventory.QuantityOnHand,
-                Product = inventory.Product
-            };
+            var inventories = _db.ProductInventories.Include(inventory => inventory.Product).ToList(); 
 
-            _db.ProductInventorySnapshots.Add(snapshot);
+            foreach(var inventory in inventories)
+            {
+                var snapshot = new ProductInventorySnapshot
+                {
+                    SnapshotTime = DateTime.UtcNow,
+                    QuantiyOnHand = inventory.QuantityOnHand,
+                    Product = inventory.Product
+                };
+                _db.Add(snapshot);
+            }
         }
     }
 }

@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <apexchart
-      type="area"
-      width="100%"
-      height="300"
-      :options="options"
-      :series="series"
-    ></apexchart>
-  </div>
+  <apexchart
+    type="area"
+    width="100%"
+    height="300"
+    :options="options"
+    :series="series"
+  ></apexchart>
 </template>
 
 <script>
@@ -39,6 +37,14 @@ export default {
         xaxis: {
           categories: this.snapshotTimeline.timeline,
           type: 'datetime',
+          labels: {
+            datetimeUTC: false,
+          },
+        },
+        tooltip: {
+          x: {
+            format: 'dd/MM/yy HH:mm',
+          },
         },
       }
     },
@@ -50,6 +56,9 @@ export default {
         })
       )
     },
+  },
+  mounted() {
+    console.log('moment', this.$moment.utc().format('YYYY-MM-DD HH:mm:ss'))
   },
 }
 </script>
