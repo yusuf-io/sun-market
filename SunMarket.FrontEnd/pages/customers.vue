@@ -183,7 +183,14 @@
 </template>
 
 <script>
+import customerService from '../services/customer-service'
+
 export default {
+  async asyncData() {
+    const customers = await customerService.fetchCustomers()
+    return { customers }
+  },
+
   data() {
     return {
       dialogCustomer: false,
@@ -211,13 +218,8 @@ export default {
         name: [(val) => (val || '').length > 0 || 'This field is required'],
       },
       customer: { primaryAddress: {} },
-      customers: [],
       customerId: null,
     }
-  },
-
-  mounted() {
-    this.fetchCustomers()
   },
 
   methods: {
@@ -225,34 +227,19 @@ export default {
       this.customerId = id
       this.dialogDelete = true
     },
-
-    async fetchCustomers() {
-      const result = await this.$axios.get(
-        `${process.env.VUE_APP_API_URL}/customers`
-      )
-      this.customers = result.data
-    },
-
     async saveNewCustomer(customer) {
       if (!this.$refs['form-customer'].validate()) return
 
-      const result = await this.$axios.post(
-        `${process.env.VUE_APP_API_URL}/customer`,
-        customer
-      )
+      await customerService.createCustomer(customer)
+
       this.$refs['form-customer'].reset()
       this.dialogCustomer = false
-      this.fetchCustomers()
-      return result.data
+      this.$nuxt.refresh()
     },
-
     async deleteCustomer() {
-      const result = await this.$axios.delete(
-        `${process.env.VUE_APP_API_URL}/customers/${this.customerId}`
-      )
+      await customerService.deleteCustomer(this.customerId)
       this.dialogDelete = false
-      this.fetchCustomers()
-      return result.data
+      this.$nuxt.refresh()
     },
   },
 }

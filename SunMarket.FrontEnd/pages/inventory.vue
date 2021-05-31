@@ -104,9 +104,9 @@
                 <v-card-text>
                   <v-form ref="form-shipment" class="mt-6">
                     <v-select
-                      v-model="shipment.productId"
+                      v-model="shipment.productInventoryId"
                       :items="productInventories"
-                      item-value="product.id"
+                      item-value="id"
                       item-text="product.name"
                       label="Product"
                       outlined
@@ -197,6 +197,7 @@
 
 <script>
 import inventoryService from '../services/inventory-service'
+import productService from '../services/product-service'
 import InventotyChart from '~/components/charts/InventotyChart.vue'
 
 export default {
@@ -204,8 +205,9 @@ export default {
     InventotyChart,
   },
   async asyncData() {
+    const productInventories = await inventoryService.getCurrentInventory()
     const snapshotTimeline = await inventoryService.getSnapshotHistory()
-    return { snapshotTimeline }
+    return { snapshotTimeline, productInventories }
   },
 
   data() {
@@ -235,14 +237,9 @@ export default {
       },
       shipment: {},
       product: {},
-      productInventories: [],
       increasedQuantiy: 24,
       toArchiveProduct: null,
     }
-  },
-
-  mounted() {
-    this.fetchProductInventories()
   },
 
   methods: {
@@ -255,48 +252,31 @@ export default {
       this.dialogDelete = true
     },
 
-    async fetchProductInventories() {
-      const result = await this.$axios.get(
-        `${process.env.VUE_APP_API_URL}/inventory`
-      )
-      this.dialogShipment = false
-      this.productInventories = result.data
-    },
-
     async saveNewShipment(shipment) {
       if (!this.$refs['form-shipment'].validate()) return
 
-      const result = await this.$axios.patch(
-        `${process.env.VUE_APP_API_URL}/inventory`,
-        shipment
-      )
+      await inventoryService.updateInventory(shipment)
+
       this.$refs['form-shipment'].reset()
       this.dialogShipment = false
-      this.fetchProductInventories()
       this.$nuxt.refresh()
-      return result.data
     },
 
     async saveNewProduct(product) {
       if (!this.$refs['form-product'].validate()) return
 
-      const result = await this.$axios.post(
-        `${process.env.VUE_APP_API_URL}/products`,
-        product
-      )
+      await productService.createProduct(product)
+
       this.$refs['form-product'].reset()
       this.dialogProduct = false
-      this.fetchProductInventories()
-      return result.data
+      this.$nuxt.refresh()
     },
 
     async archiveProduct() {
-      const result = await this.$axios.patch(
-        `${process.env.VUE_APP_API_URL}/products/${this.toArchiveProduct}`
-      )
+      await productService.deleteProduct(this.toArchiveProduct)
+
       this.dialogDelete = false
-      this.fetchProductInventories()
-      return result.data
+      this.$nuxt.refresh()
     },
   },
 }

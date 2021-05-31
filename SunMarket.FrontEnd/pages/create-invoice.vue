@@ -243,7 +243,7 @@ import orderService from '../services/order-service'
 export default {
   async asyncData() {
     const customers = await customerService.fetchCustomers()
-    const productInventories = await inventoryService.fetchProductInventories()
+    const productInventories = await inventoryService.getCurrentInventory()
     return { customers, productInventories }
   },
 

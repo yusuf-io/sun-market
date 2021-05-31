@@ -35,8 +35,8 @@ namespace SunMarket.Web.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            _logger.LogInformation($"Updating inventory for {shipment.ProductId} - Adjustment: {shipment.Adjustment}");
-            var inventory = _inventoryService.UpdateUnitsAvailable(shipment.ProductId, shipment.Adjustment);
+            _logger.LogInformation($"Updating inventory for {shipment.ProductInventoryId} - Adjustment: {shipment.Adjustment}");
+            var inventory = _inventoryService.UpdateUnitsAvailable(shipment.ProductInventoryId, shipment.Adjustment);
             return Ok(inventory);
         }
 
