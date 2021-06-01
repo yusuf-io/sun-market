@@ -57,8 +57,5 @@ export default {
       )
     },
   },
-  mounted() {
-    console.log('moment', this.$moment.utc().format('YYYY-MM-DD HH:mm:ss'))
-  },
 }
 </script>
