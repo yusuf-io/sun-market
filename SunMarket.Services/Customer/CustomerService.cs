@@ -19,7 +19,7 @@ namespace SunMarket.Services.Customer
         /// </summary>
         /// <param name="customer"></param>
         /// <returns></returns>
-        ServiceResponse<Data.Models.Customer> ICustomerService.CreateCustomer(Data.Models.Customer customer)
+        public ServiceResponse<Data.Models.Customer> CreateCustomer(Data.Models.Customer customer)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace SunMarket.Services.Customer
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        ServiceResponse<bool> ICustomerService.DeleteCustomer(int id)
+        public ServiceResponse<bool> DeleteCustomer(int id)
         {
            
              var customer = _db.Customers.Find(id);
@@ -97,7 +97,7 @@ namespace SunMarket.Services.Customer
         /// Retrieves all customers from the database
         /// </summary>
         /// <returns></returns>
-        List<Data.Models.Customer> ICustomerService.GetAllCustomers()
+        public List<Data.Models.Customer> GetAllCustomers()
         {
             return _db.Customers.Include(customer=>customer.PrimaryAddress)
                                 .OrderBy(customer=>customer.LastName)
