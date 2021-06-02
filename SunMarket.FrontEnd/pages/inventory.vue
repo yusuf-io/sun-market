@@ -249,6 +249,12 @@ export default {
     }
   },
 
+  head() {
+    return {
+      title: 'Inventory',
+    }
+  },
+
   methods: {
     mapIsTaxable(isTaxable) {
       return isTaxable ? 'Yes' : 'No '

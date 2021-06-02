@@ -6,8 +6,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - sun-market',
-    title: 'sun-market',
+    titleTemplate: '%s | Sun Market',
+    title: 'Sun Market',
     htmlAttrs: {
       lang: 'en',
     },

@@ -62,6 +62,12 @@ export default {
     }
   },
 
+  head() {
+    return {
+      title: 'Sales Orders',
+    }
+  },
+
   methods: {
     getTotal(order) {
       return order.salesOrderItems.reduce(

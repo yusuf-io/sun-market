@@ -280,6 +280,12 @@ export default {
     }
   },
 
+  head() {
+    return {
+      title: 'Create Invoice',
+    }
+  },
+
   computed: {
     customer() {
       return this.customers.find(

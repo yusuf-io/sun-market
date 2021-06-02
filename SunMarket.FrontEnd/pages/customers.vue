@@ -233,6 +233,12 @@ export default {
     }
   },
 
+  head() {
+    return {
+      title: 'Customers',
+    }
+  },
+
   methods: {
     openDeleteDialog(id) {
       this.customerId = id
