@@ -18,7 +18,7 @@ Full stack development tools used to build the app, including:
 ```sql
 CREATE USER sunmarket WITH PASSWORD 'sunmarket123';
 ```
-3. Create the database `sun_market` and assign the previous user will full previliges.
+3. Create the database `sun_market` and assign to the previous user full previliges.
 ```sql
 CREATE DATABASE sun_market;
 GRANT ALL PRIVILEGES ON DATABASE sun_market to sunmarket;
