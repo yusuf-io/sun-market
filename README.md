@@ -36,5 +36,5 @@ dotnet ef --startup-project ..\SunMarket.Web database update
 3. Run the development server ```npm run dev```.
 
 ### Connect to lacal server
-* Set ```VUE_APP_API_URL``` to local server url.
+* Set ```VUE_APP_API_URL``` in ```.env``` to local server url.
 
