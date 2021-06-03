@@ -3,11 +3,11 @@ Sun Market is inventory and sales orders management app for small to mid-level b
 
 ## Tech Stack
 Full stack development tools used to build the app, including:
-* REST API development with **.NET.Core**
+* REST API development with **.NET Core**
 * Front-End development with **Nuxt.js** and **Vuetify.js**
 * Using **SQL** with a **PostgresSQL** database
 * Unit testing nux.js with **Jest**
-* Unit testing .NET.Core with **xUnit**
+* Unit testing .NET Core with **xUnit**
 * End-to-end testing nuxt.js with **Cypress**
 
 ## Run Projects
